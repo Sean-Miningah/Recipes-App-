@@ -4,10 +4,13 @@ import { MenuAlt2Icon, SearchIcon } from "react-native-heroicons/outline"
 import { useNavigation } from '@react-navigation/native'
 
 import Recipes from '../components/Recipes'
+import data from '../dummyData.json'
 
 const HomeScreen = () => {
+
 	const navigation = useNavigation()
 
+	const testData = data
 
 	useLayoutEffect(() =>{
 		navigation.setOptions({
@@ -44,9 +47,17 @@ const HomeScreen = () => {
 			<ScrollView 
 			  showsVerticalScrollIndicator={false}
 			>
-				<Recipes />	
-				<Recipes />
-				<Recipes />
+				{testData?.map((test) => (
+					<Recipes 
+						key={test.id}
+						title={test.title}
+						image={test.image}
+						usedIngredientCount={test.usedIngredientCount}
+						missedIngredientCount={test.missedIngredientCount}
+						usedIngredients={test.usedIngredientCount}
+						likes={test.likes}
+					/>	
+				))}
 			</ScrollView>
 		</View>
   )
