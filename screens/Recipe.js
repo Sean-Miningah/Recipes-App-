@@ -5,7 +5,7 @@ import { useNavigation, useRoute } from '@react-navigation/native'
 
 import { ChevronLeftIcon } from 'react-native-heroicons/solid';
 import { BookmarkIcon } from 'react-native-heroicons/solid';
-import { ArrowLeftIcon } from 'react-native-heroicons/outline';
+import Ingredient from '../components/Ingredient';
 
 const Recipe = () => {
 
@@ -27,8 +27,6 @@ const Recipe = () => {
 			headerShown:false,
 		})
 	}, [])
-
-	console.log(image)
 
   return (
 		<View style={{flex:1}}>
@@ -73,15 +71,27 @@ const Recipe = () => {
 								<Text className="font-bold tracking-wide" > used ingredients</Text>
 							</View>	
 						</View>
+
+						<Text className="text-xl m-2 border-b pb-2">Used Ingredients</Text>
+						{usedIngredients?.map((ingredient) => (
+							<Ingredient 
+							  key={ingredient.id}
+								unit={ingredient.unit}
+								name={ingredient.name}
+								image={ingredient.image}
+								amount={ingredient.amount}
+							/>))}
+
 						<Text className="text-xl m-2 border-b pb-2">Missed Ingredients</Text>
 
 						{missedIngredients?.map((ingredient) => (
 							<Ingredient 
 							  key={ingredient.id}
-								unit={ingredient.handful}
-								
-							/>
-						))}
+								unit={ingredient.unit}
+								name={ingredient.name}
+								image={ingredient.image}
+								amount={ingredient.amount}
+							/>))}
 				</View>
 			</ScrollView>
 		</View>

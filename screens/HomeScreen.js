@@ -1,5 +1,5 @@
 import { View, Text, StatusBar, TextInput, ScrollView } from 'react-native'
-import React, { useLayoutEffect } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { MenuAlt2Icon, SearchIcon } from "react-native-heroicons/outline"
 import { useNavigation } from '@react-navigation/native'
 
@@ -7,6 +7,13 @@ import Recipes from '../components/Recipes'
 import data from '../dummyData.json'
 
 const HomeScreen = () => {
+
+	const [featuredSearch, setFeaturedSearch]=useState([])
+	const [searchValue, setSearchValue]=useState("")
+
+	const key = "b5023e72ee484e13b3b9d84d113f581d"
+	const spoonAcular = `https://api.spoonacular.com/recipes/findByIngredients?apiKey=${key}&ingredients=${searchValue}&number=10&limitLicense=true&ranking=1&ignorePantry=false`
+	
 
 	const navigation = useNavigation()
 
@@ -17,6 +24,23 @@ const HomeScreen = () => {
 			headerShown:false,
 		})
 	},[])
+
+	useEffect(() => {
+
+	}, [])
+
+const searchMealData = () => {
+	console.log("Start ...............!")
+	fetch(spoonAcular, {
+		method: 'GET',
+	})
+	.then((response) => {return response.json()})
+	.then(data => setFeaturedSearch(data))
+	.catch((error) => {
+		console.error(error)
+	})
+}
+
 
   return (
 		<View className="bg-white-200 px-5 py-4" style={{flex:1}}>
@@ -37,7 +61,9 @@ const HomeScreen = () => {
 						<TextInput 
 						  className="pl-3"
 						  keyboardType="default"
-						  placeholder="Search for query 'onions, tomatoes, spinach'"					
+						  placeholder="Search for query 'onions, tomatoes, spinach'"
+						  onChangeText={(text) => setSearchValue(text)}
+						  onSubmitEditing={() => searchMealData()}					
 						/>
 					</View>
 				</View>
@@ -47,14 +73,15 @@ const HomeScreen = () => {
 			<ScrollView 
 			  showsVerticalScrollIndicator={false}
 			>
-				{testData?.map((test) => (
+				{featuredSearch?.map((test) => (
 					<Recipes 
 						key={test.id}
 						title={test.title}
 						image={test.image}
 						usedIngredientCount={test.usedIngredientCount}
 						missedIngredientCount={test.missedIngredientCount}
-						usedIngredients={test.usedIngredientCount}
+						missedIngredients={test.missedIngredients}
+						usedIngredients={test.usedIngredients}
 						likes={test.likes}
 					/>	
 				))}
